@@ -17,15 +17,14 @@ def date_format = "yyyy-MM-dd-HH:mm"
 pipeline {
     agent none
     stages {
-        stage('Parallel Stages') {
+        stage('Master Node git pull & Deployment Process') {
             failFast true // You can force your parallel stages to all be aborted when one of them fails, by adding failFast true to the stage containing the parallel.
             parallel {
-                stage('MasterNode:1.30 Git pull process and docker build push process') {
+                stage('MasterNode:1.30 Steps') {
                     agent {
                         label "master_node"
                     }
                     steps{  // You can only add one step
-
                         script { // Frontend git pull request and some conditions
                             if (skipRemainingSteps == true){
                                 try {
@@ -131,25 +130,30 @@ pipeline {
                                 echo 'Some Errors Found So Skipped This Part'
                             }
                         }
-                        
+                    }
+                }   
+            }
+        }
+        stage('Multi Nodes Parallel Stages Begin'){
+            failFast true // You can force your parallel stages to all be aborted when one of them fails, by adding failFast true to the stage containing the parallel.
+            parallel {
+                agent {
+                    label "node_222"
+                }
+                steps{
+                    script{
+                        echo"NODE 222"
                     }
                 }
-                stage('JetsonNano:1.222 Steps'){
-                    agent {
-                        label "node_222"
+                agent {
+                    label "node_140pc"
+                }
+                steps{
+                    script{
+                        echo"node_140pc"
                     }
-                    steps{
-
-                        script{
-                            echo"NODE 222"
-                        }
-                        
-                    }
-
-
                 }
             }
-        
         }
     }
 }
