@@ -17,16 +17,16 @@ def date_format = "yyyy-MM-dd-HH:mm"
 pipeline {
     agent none
     stages {
-        stage('stage1') {
+        stage('Parallel Stages') {
             failFast true // You can force your parallel stages to all be aborted when one of them fails, by adding failFast true to the stage containing the parallel.
             parallel {
-                
-                stage('MasterNode Git pull process and docker build push process') {
+                stage('MasterNode:1.30 Git pull process and docker build push process') {
                     agent {
                         label "master_node"
                     }
-                    steps{
-                        script {
+                    steps{  // You can only add one step
+
+                        script { // Frontend git pull request and some conditions
                             if (skipRemainingSteps == true){
                                 try {
 
@@ -53,6 +53,7 @@ pipeline {
                                         
                                         echo "date_front_commit_date : ${date_front_commit_date}"
                                         echo "date_front_last_commit_date : ${date_front_last_commit_date}"
+
                                     }
                                 } catch (Exception e) {
                                     echo "Exception occurred: ${e.toString()} ${skipRemainingStages}"
@@ -62,7 +63,7 @@ pipeline {
                                 echo 'Some Errors Found So Skipped This Part'
                             }
                         }
-                        script {
+                        script { // Backend git pull request and some conditions
                             if (skipRemainingSteps == true){
                                 try {
                                     echo 'Pulling Backend'
@@ -97,12 +98,14 @@ pipeline {
                                 echo 'Some Errors Found So Skipped This Part'
                             }
                         }
-                        script{
+                        script{ // Build and deployment process
                             if (skipRemainingSteps == true){
                                 try{
                             
                                     if (date_front_commit_date > date_front_last_commit_date || date_back_commit_date > date_back_last_commit_date){
-
+                                        dir('/home/diycam/Desktop/jenkins_master_files/workspace/pipeline_projects/pull_git_code_to_slaves/frontend') {
+                                            sh 'cp -r /home/diycam/Desktop/jenkins_master_files/workspace/pipeline_projects/pull_git_code_to_slaves/frontend/build/* /home/diycam/RDX/frontend/html'
+                                        }
                                         dir('/home/diycam/RDX/') {
                                             for (build_name in [ 'service', 'frontend', 'base', 'user_info', 'socketserver','camera']) { // Build all this services
                                                 // sh "docker buildx bake --builder armBuilder -f docker-compose.yml --push --set *.platform=linux/amd64,linux/arm64 ${build_name} --no-cache"
@@ -128,7 +131,22 @@ pipeline {
                                 echo 'Some Errors Found So Skipped This Part'
                             }
                         }
+                        
                     }
+                }
+                stage('JetsonNano:1.222 Steps'){
+                    agent {
+                        label "node_222"
+                    }
+                    steps{
+
+                        script{
+                            echo"NODE 222"
+                        }
+                        
+                    }
+
+
                 }
             }
         
