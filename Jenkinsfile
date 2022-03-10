@@ -144,7 +144,7 @@ pipeline {
                     steps{
                         script{
                             echo "NODE 222"
-                            sh 'ifconfig pwd'
+                            sh 'ifconfig'
                             
                         }
                     }
@@ -156,7 +156,7 @@ pipeline {
                     steps{
                         script{
                             echo "node_140pc"
-                            sh 'ifconfig pwd'
+                            sh 'ifconfig'
                         }
                     }
                 }
