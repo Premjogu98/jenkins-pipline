@@ -38,7 +38,7 @@ pipeline {
                                     echo 'Pulling Frontend'
 
                                     dir('/home/diycam/Desktop/jenkins_master_files/workspace/pipeline_projects/pull_git_code_to_slaves/frontend') { // Pull Frontend Code from github 
-                                        git branch: '1.0.1_dev', url: "https://Premjogu98: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@github.com/indiadiycam/rdx_frontend.git"
+                                        git branch: '1.0.1_dev', url: "https://${env.GIT_USERNAME}:${env.GIT_ACCESSTOKEN}@github.com/indiadiycam/rdx_frontend.git"
                                     }
                                     
                                     dir('/home/diycam/Desktop/jenkins_master_files/workspace/pipeline_projects/pull_git_code_to_slaves/frontend'){ // Path to frontend folder
@@ -73,7 +73,7 @@ pipeline {
                                     echo 'Pulling Backend'
 
                                     dir('/home/diycam/RDX/') { // Pull Backend Code from github 
-                                        git branch: 'dipesh_dev', url: 'https://Premjogu98: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@github.com/dipesh-adekar/rdx.git'
+                                        git branch: 'dipesh_dev', url: "https://${env.GIT_USERNAME}:${env.GIT_ACCESSTOKEN}@github.com/dipesh-adekar/rdx.git"
                                     }
                                     
                                     dir('/home/diycam/RDX/'){ // Path to backend folder
