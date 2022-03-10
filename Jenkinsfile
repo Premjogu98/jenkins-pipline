@@ -137,21 +137,26 @@ pipeline {
         stage('Multi Nodes Parallel Stages Begin'){
             failFast true // You can force your parallel stages to all be aborted when one of them fails, by adding failFast true to the stage containing the parallel.
             parallel {
-                stage('Parallel Nodes') {
+                stage('Parallel node_222') {
                     agent {
                         label "node_222"
                     }
                     steps{
                         script{
-                            echo"NODE 222"
+                            echo "NODE 222"
+                            sh 'ifconfig pwd'
+                            
                         }
                     }
+                }
+                stage('Parallel node_140pc'){
                     agent {
                         label "node_140pc"
                     }
                     steps{
                         script{
-                            echo"node_140pc"
+                            echo "node_140pc"
+                            sh 'ifconfig pwd'
                         }
                     }
                 }
