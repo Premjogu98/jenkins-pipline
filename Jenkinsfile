@@ -15,11 +15,6 @@ def date_back_last_commit_date = null
 def date_format = "yyyy-MM-dd-HH:mm"
 
 pipeline {
-    //Setting the environment variables DISABLE_AUTH and DB_ENGINE
-    environment {
-        GIT_ACCESS_TOKEN = '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'
-        GIT_USERNAME = 'Premjogu98'
-    }
     agent none
     stages {
         stage('stage1') {
