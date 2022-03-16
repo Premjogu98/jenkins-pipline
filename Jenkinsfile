@@ -149,17 +149,17 @@ pipeline {
                         }
                     }
                 }
-                stage('Parallel node_140pc'){
-                    agent {
-                        label "node_140pc"
-                    }
-                    steps{
-                        script{
-                            echo "node_140pc"
-                            sh 'ifconfig'
-                        }
-                    }
-                }
+                // stage('Parallel node_140pc'){
+                //     agent {
+                //         label "node_140pc"
+                //     }
+                //     steps{
+                //         script{
+                //             echo "node_140pc"
+                //             sh 'ifconfig'
+                //         }
+                //     }
+                // }
             }
         }
     }
