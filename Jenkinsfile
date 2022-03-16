@@ -15,30 +15,24 @@ def date_back_last_commit_date = null
 def date_format = "yyyy-MM-dd-HH:mm"
 
 pipeline {
-    //Setting the environment variables DISABLE_AUTH and DB_ENGINE
-    environment {
-        GIT_ACCESS_TOKEN = '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'
-        GIT_USERNAME = 'Premjogu98'
-    }
     agent none
     stages {
-        stage('stage1') {
+        stage('Master Node git pull & Deployment Process') {
             failFast true // You can force your parallel stages to all be aborted when one of them fails, by adding failFast true to the stage containing the parallel.
             parallel {
-                
-                stage('MasterNode Git pull process and docker build push process') {
+                stage('MasterNode:1.30 Steps') {
                     agent {
                         label "master_node"
                     }
-                    steps{
-                        script {
+                    steps{  // You can only add one step
+                        script { // Frontend git pull request and some conditions
                             if (skipRemainingSteps == true){
                                 try {
 
                                     echo 'Pulling Frontend'
 
                                     dir('/home/diycam/Desktop/jenkins_master_files/workspace/pipeline_projects/pull_git_code_to_slaves/frontend') { // Pull Frontend Code from github 
-                                        git branch: '1.0.1_dev', url: "https://Premjogu98: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@github.com/indiadiycam/rdx_frontend.git"
+                                        git branch: '1.0.1_dev', url: "https://${env.GIT_USERNAME}:${env.GIT_ACCESSTOKEN}@github.com/indiadiycam/rdx_frontend.git"
                                     }
                                     
                                     dir('/home/diycam/Desktop/jenkins_master_files/workspace/pipeline_projects/pull_git_code_to_slaves/frontend'){ // Path to frontend folder
@@ -58,6 +52,7 @@ pipeline {
                                         
                                         echo "date_front_commit_date : ${date_front_commit_date}"
                                         echo "date_front_last_commit_date : ${date_front_last_commit_date}"
+
                                     }
                                 } catch (Exception e) {
                                     echo "Exception occurred: ${e.toString()} ${skipRemainingStages}"
@@ -67,13 +62,13 @@ pipeline {
                                 echo 'Some Errors Found So Skipped This Part'
                             }
                         }
-                        script {
+                        script { // Backend git pull request and some conditions
                             if (skipRemainingSteps == true){
                                 try {
                                     echo 'Pulling Backend'
 
                                     dir('/home/diycam/RDX/') { // Pull Backend Code from github 
-                                        git branch: 'dipesh_dev', url: 'https://Premjogu98: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@github.com/dipesh-adekar/rdx.git'
+                                        git branch: 'dipesh_dev', url: "https://${env.GIT_USERNAME}:${env.GIT_ACCESSTOKEN}@github.com/dipesh-adekar/rdx.git"
                                     }
                                     
                                     dir('/home/diycam/RDX/'){ // Path to backend folder
@@ -102,12 +97,14 @@ pipeline {
                                 echo 'Some Errors Found So Skipped This Part'
                             }
                         }
-                        script{
+                        script{ // Build and deployment process
                             if (skipRemainingSteps == true){
                                 try{
                             
                                     if (date_front_commit_date > date_front_last_commit_date || date_back_commit_date > date_back_last_commit_date){
-
+                                        dir('/home/diycam/Desktop/jenkins_master_files/workspace/pipeline_projects/pull_git_code_to_slaves/frontend') {
+                                            sh 'cp -r /home/diycam/Desktop/jenkins_master_files/workspace/pipeline_projects/pull_git_code_to_slaves/frontend/build/* /home/diycam/RDX/frontend/html'
+                                        }
                                         dir('/home/diycam/RDX/') {
                                             for (build_name in [ 'service', 'frontend', 'base', 'user_info', 'socketserver','camera']) { // Build all this services
                                                 // sh "docker buildx bake --builder armBuilder -f docker-compose.yml --push --set *.platform=linux/amd64,linux/arm64 ${build_name} --no-cache"
@@ -134,9 +131,36 @@ pipeline {
                             }
                         }
                     }
+                }   
+            }
+        }
+        stage('Multi Nodes Parallel Stages Begin'){
+            failFast true // You can force your parallel stages to all be aborted when one of them fails, by adding failFast true to the stage containing the parallel.
+            parallel {
+                stage('Parallel node_222') {
+                    agent {
+                        label "node_222"
+                    }
+                    steps{
+                        script{
+                            echo "NODE 222"
+                            sh 'ifconfig'
+                            
+                        }
+                    }
+                }
+                stage('Parallel node_140pc'){
+                    agent {
+                        label "node_140pc"
+                    }
+                    steps{
+                        script{
+                            echo "node_140pc"
+                            sh 'ifconfig'
+                        }
+                    }
                 }
             }
-        
         }
     }
 }
