@@ -45,17 +45,8 @@ pipeline {
                         label "node_222"
                     }
                     steps{
-                        script{
-                            echo "Push Start"
-                            container_id = sh(script: 'docker service ls -q',returnStdout: true).trim()
-                            def containerid_list = container_id.split('\n')
-                            echo "docker container list ${containerid_list}"
-                            for (service_id in containerid_list){
-                                sh "docker service rm ${service_id}"
-                            }
-                            sh 'docker stack rm rdx '
-                            echo "Push End"
-                        }
+                        echo "======  Testing Start  ======"
+                        echo "======  Testing End  ======"
                     }
                 }
                 stage('Testing on node_222') {
@@ -64,9 +55,25 @@ pipeline {
                     }
                     steps{
                         script{
-                            echo "Testing Start"
-                            sh 'ifconfig eth0'
-                            echo "Testing End"
+                            echo "======  Docker Image Pull Start  ======"
+
+                            dir('/home/diycam/RDX/'){
+                                container_id = sh(script: 'docker service ls -q',returnStdout: true).trim()
+                                def containerid_list = container_id.split('\n')
+                                echo "docker container list ${containerid_list}"
+                                for (service_id in containerid_list){
+                                    sh "docker service rm ${service_id}"
+                                }
+                                sh 'docker stack rm rdx'
+                                sleep 3
+                                sh 'docker-compose -f docker-compose-prod.yml pull'
+                                sleep 10
+                                sh 'docker stack deploy -c docker-compose-prod.yml rdx'
+                                sleep 5
+                                sh 'sudo service host start'
+                            }
+                            
+                            echo "======   Docker Image Pull End  ======"
                         }
                     }
                 }
