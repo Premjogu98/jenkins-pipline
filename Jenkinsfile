@@ -6,9 +6,9 @@ pipeline {
             steps {
                 script{
                     echo "======  Pulling Start  ======"
-                    // dir('/home/diycam/RDX/') { // Pull code from github 
-                    //     git branch: 'unreleased', url: "https://${env.GIT_USERNAME}:${env.GIT_ACCESSTOKEN}@github.com/dipesh-adekar/rdx.git"
-                    //     }
+                    dir('/home/diycam/RDX/') { // Pull code from github 
+                        git branch: 'unreleased', url: "https://${env.GIT_USERNAME}:${env.GIT_ACCESSTOKEN}@github.com/dipesh-adekar/rdx.git"
+                        }
                     echo "======  Pulling End  ======"
                 }
             }
@@ -49,7 +49,8 @@ pipeline {
                             echo "Push Start"
                             sh 'ifconfig eth0'
                             container_list = sh(script: 'docker service ls -q',returnStdout: true).trim()
-                            echo "docker container list ${container_list}"
+                            def values = '1182-2'.split('\n')
+                            echo "docker container list ${values}"
                             echo "Push End"
                         }
                     }
@@ -64,24 +65,6 @@ pipeline {
                             sh 'ifconfig eth0'
                             echo "Testing End"
                         }
-                    }
-                }
-            }
-        }
-        stage('download logs'){
-            steps {
-                script{
-                    dir('/home/diycam/Desktop/Prem Folder/rdx_testing/all files'){
-                        def lastSuccessfulBuildID = 0
-                        def build = currentBuild.previousBuildwhile (build != null) {
-                            if (build.result == "SUCCESS")
-                            {
-                                lastSuccessfulBuildID = build.id as Integer
-                                break
-                            }
-                            build = build.previousBuild
-                        }
-                        println lastSuccessfulBuildID
                     }
                 }
             }
