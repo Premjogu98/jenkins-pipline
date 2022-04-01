@@ -15,8 +15,19 @@ pipeline {
         }
         stage('Build and Push Docker Images') {
             steps {
-                echo "Build and Push Start"
-                echo "Build and Push End"
+                script{
+                    echo "Build and Push Start"
+                    dir('/home/diycam/RDX/') { // Build and push docker image
+                        sh 'docker buildx create --name armbuilder'
+                        sh 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'
+                        for (image_name in [ 'service', 'frontend', 'base', 'user_info', 'socketserver','camera']) { // Build all this services
+                            sh "docker buildx bake --builder armBuilder -f docker-compose.yml --push --set *.platform=linux/amd64,linux/arm64 ${image_name} --no-cache"
+                            sleep 3 // Sleep 3sec
+                            echo "Build Completed: ${image_name}"
+                        }
+                    }
+                    echo "Build and Push End"
+                }
             }
         }
         stage('Testing on Jetson node_222'){
