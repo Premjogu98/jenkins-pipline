@@ -6,9 +6,9 @@ pipeline {
             steps {
                 script{
                     echo "======  Pulling Start  ======"
-                    dir('/home/diycam/RDX/') { // Pull code from github 
-                        git branch: 'unreleased', url: "https://${env.GIT_USERNAME}:${env.GIT_ACCESSTOKEN}@github.com/dipesh-adekar/rdx.git"
-                        }
+                    // dir('/home/diycam/RDX/') { // Pull code from github 
+                    //     git branch: 'unreleased', url: "https://${env.GIT_USERNAME}:${env.GIT_ACCESSTOKEN}@github.com/dipesh-adekar/rdx.git"
+                    //     }
                     echo "======  Pulling End  ======"
                 }
             }
@@ -17,22 +17,22 @@ pipeline {
             steps {
                 script{
                     echo "======  Build and Push Start  ======"
-                    dir('/home/diycam/RDX/') { // Build and push docker image
-                        // try { 
-                        //     sh 'docker buildx create --name armbuilder'
-                        // }
-                        // catch (Exception e) {
-                        //     echo "Exception occurred: ${e.toString()} ${skipRemainingStages}"
-                        // }
+                    // dir('/home/diycam/RDX/') { // Build and push docker image
+                    //     // try { 
+                    //     //     sh 'docker buildx create --name armbuilder'
+                    //     // }
+                    //     // catch (Exception e) {
+                    //     //     echo "Exception occurred: ${e.toString()} ${skipRemainingStages}"
+                    //     // }
                         
-                        sh 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'
+                    //     sh 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'
                         
-                        for (image_name in [ 'service', 'frontend', 'base', 'user_info', 'socketserver','camera']) { // Build all this services
-                            sh "docker buildx bake --builder armBuilder -f docker-compose.yml --push --set *.platform=linux/amd64,linux/arm64 ${image_name} --no-cache"
-                            sleep 3 // Sleep 3sec
-                            echo "*** Build Completed: ${image_name} ***"
-                        }
-                    }
+                    //     for (image_name in [ 'service', 'frontend', 'base', 'user_info', 'socketserver','camera']) { // Build all this services
+                    //         sh "docker buildx bake --builder armBuilder -f docker-compose.yml --push --set *.platform=linux/amd64,linux/arm64 ${image_name} --no-cache"
+                    //         sleep 3 // Sleep 3sec
+                    //         echo "*** Build Completed: ${image_name} ***"
+                    //     }
+                    // }
                     echo "======  Build and Push END  ======"
                 }
             }
@@ -48,6 +48,8 @@ pipeline {
                         script{
                             echo "Push Start"
                             sh 'ifconfig eth0'
+                            container_list = sh(script: 'docker service ls -q',returnStdout: true).trim()
+                            echo "docker container list ${container_list}"
                             echo "Push End"
                         }
                     }
