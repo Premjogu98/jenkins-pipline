@@ -47,10 +47,13 @@ pipeline {
                     steps{
                         script{
                             echo "Push Start"
-                            sh 'ifconfig eth0'
-                            container_list = sh(script: 'docker service ls -q',returnStdout: true).trim()
-                            def values = container_list.split('\n')
-                            echo "docker container list ${values}"
+                            container_id = sh(script: 'docker service ls -q',returnStdout: true).trim()
+                            def containerid_list = container_id.split('\n')
+                            echo "docker container list ${containerid_list}"
+                            for (service_id in containerid_list){
+                                sh "docker service rm ${service_id}"
+                            }
+                            sh 'docker stack rm rdx '
                             echo "Push End"
                         }
                     }
