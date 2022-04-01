@@ -45,15 +45,6 @@ pipeline {
                         label "node_222"
                     }
                     steps{
-                        echo "======  Testing Start  ======"
-                        echo "======  Testing End  ======"
-                    }
-                }
-                stage('Testing on node_222') {
-                    agent {
-                        label "node_222"
-                    }
-                    steps{
                         script{
                             echo "======  Docker Image Pull Start  ======"
 
@@ -72,8 +63,29 @@ pipeline {
                                 sleep 5
                                 sh 'sudo service host start'
                             }
-                            
+
                             echo "======   Docker Image Pull End  ======"
+                        }
+                    }
+                }
+                stage('Testing on node_222') {
+                    agent {
+                        label "node_222"
+                    }
+                    steps{
+                        script{
+                            echo "======  RDX Testing Start  ======"
+
+                            dir('/home/diycam/rdx-testing'){
+
+                                git "https://${env.GIT_USERNAME}:${env.GIT_ACCESSTOKEN}@github.com/Premjogu98/rdx-testing.git"
+
+                                sh 'python3 testing_flow/after_login/after_login_flow.py'
+
+                                sh 'python3 global_param/config_email.py'
+                            }
+                            
+                            echo "======  RDX Testing Start End  ======"
                         }
                     }
                 }
