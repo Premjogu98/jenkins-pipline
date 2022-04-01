@@ -24,7 +24,7 @@ pipeline {
                     steps{
                         script{
                             echo "Push Start"
-                            sh 'ifconfig etho'
+                            sh 'ifconfig eth0'
                             echo "Push End"
                         }
                     }
@@ -36,7 +36,7 @@ pipeline {
                     steps{
                         script{
                             echo "Testing Start"
-                            sh 'ifconfig etho'
+                            sh 'ifconfig eth0'
                             echo "Testing End"
                         }
                     }
