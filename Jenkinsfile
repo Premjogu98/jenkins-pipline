@@ -68,5 +68,23 @@ pipeline {
                 }
             }
         }
+        stage('download logs'){
+            steps {
+                script{
+                    dir('/home/diycam/Desktop/Prem Folder/rdx_testing/all files'){
+                        def lastSuccessfulBuildID = 0
+                        def build = currentBuild.previousBuildwhile (build != null) {
+                            if (build.result == "SUCCESS")
+                            {
+                                lastSuccessfulBuildID = build.id as Integer
+                                break
+                            }
+                            build = build.previousBuild
+                        }
+                        println lastSuccessfulBuildID
+                    }
+                }
+            }
+        }
     }
 }
