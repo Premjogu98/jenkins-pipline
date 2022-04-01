@@ -29,7 +29,6 @@ pipeline {
                         }
                     }
                 }
-<<<<<<< HEAD
                 stage('Testing on node_222') {
                     agent {
                         label "node_222"
@@ -42,20 +41,3 @@ pipeline {
                         }
                     }
                 }
-=======
-                // stage('Parallel node_140pc'){
-                //     agent {
-                //         label "node_140pc"
-                //     }
-                //     steps{
-                //         script{
-                //             echo "node_140pc"
-                //             sh 'ifconfig'
-                //         }
-                //     }
-                // }
->>>>>>> 1ddcfe10b8df1a9340e55cf693694c98b2ef49b0
-            }
-        }
-    }
-}
