@@ -18,15 +18,15 @@ pipeline {
                 script{
                     echo "======  Build and Push Start  ======"
                     dir('/home/diycam/RDX/') { // Build and push docker image
-                        try { 
-                            sh 'docker buildx create --name armbuilder'
-                        }
-                        catch (Exception e) {
-                            echo "Exception occurred: ${e.toString()} ${skipRemainingStages}"
-                        }
-                        try {
-                            sh 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'
-                        }
+                        // try { 
+                        //     sh 'docker buildx create --name armbuilder'
+                        // }
+                        // catch (Exception e) {
+                        //     echo "Exception occurred: ${e.toString()} ${skipRemainingStages}"
+                        // }
+                        // try {
+                        //     sh 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'
+                        // }
                         catch (Exception e) {
                             echo "Exception occurred: ${e.toString()} ${skipRemainingStages}"
                         }
