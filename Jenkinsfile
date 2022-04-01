@@ -49,7 +49,7 @@ pipeline {
                             echo "Push Start"
                             sh 'ifconfig eth0'
                             container_list = sh(script: 'docker service ls -q',returnStdout: true).trim()
-                            def values = '1182-2'.split('\n')
+                            def values = container_list.split('\n')
                             echo "docker container list ${values}"
                             echo "Push End"
                         }
