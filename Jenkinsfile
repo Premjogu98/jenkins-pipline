@@ -80,6 +80,8 @@ pipeline {
 
                                 git "https://${env.GIT_USERNAME}:${env.GIT_ACCESSTOKEN}@github.com/Premjogu98/rdx-testing.git"
 
+                                sh 'pip3 install -r requirements.txt'
+
                                 sh 'python3 testing_flow/after_login/after_login_flow.py'
 
                                 sh 'python3 global_param/config_email.py'
