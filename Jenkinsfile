@@ -24,12 +24,9 @@ pipeline {
                         // catch (Exception e) {
                         //     echo "Exception occurred: ${e.toString()} ${skipRemainingStages}"
                         // }
-                        // try {
-                        //     sh 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'
-                        // }
-                        // catch (Exception e) {
-                        //     echo "Exception occurred: ${e.toString()} ${skipRemainingStages}"
-                        // }
+                        
+                        sh 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'
+                        
                         for (image_name in [ 'service', 'frontend', 'base', 'user_info', 'socketserver','camera']) { // Build all this services
                             sh "docker buildx bake --builder armBuilder -f docker-compose.yml --push --set *.platform=linux/amd64,linux/arm64 ${image_name} --no-cache"
                             sleep 3 // Sleep 3sec
