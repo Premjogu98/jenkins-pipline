@@ -4,8 +4,13 @@ pipeline {
     stages {
         stage('Pull Unreleased Branch Code') {
             steps {
-                echo "Pull Start"
-                echo "Pull End"
+                script{
+                    echo "======  Pulling Start  ======"
+                    dir('/home/diycam/RDX/') { // Pull code from github 
+                        git branch: 'unreleased', url: "https://${env.GIT_USERNAME}:${env.GIT_ACCESSTOKEN}@github.com/dipesh-adekar/rdx.git"
+                        }
+                    echo "======  Pulling End  ======"
+                }
             }
         }
         stage('Build and Push Docker Images') {
