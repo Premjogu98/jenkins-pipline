@@ -37,9 +37,6 @@ pipeline {
                     echo "======  Build and Push END  ======"
                 }
             }
-            steps {
-                sh 'ifconfig'
-            }
         }
         stage('Testing on Jetson node_222'){
             failFast true // You can force your parallel stages to all be aborted when one of them fails, by adding failFast true to the stage containing the parallel.
