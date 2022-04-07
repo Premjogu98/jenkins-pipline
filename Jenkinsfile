@@ -43,14 +43,14 @@ pipeline {
                 script{
                     echo "======  Testing Start  ======"
                     dir('/home/diycam/Desktop/Prem Folder/rdx-testing') { // Build and push docker image
-                        parallel(
-                            a: {
-                                sh'python3 testing_flow/mfg/mfg_flow.py'
-                            },
-                            b: {
-                                sh'python3 testing_flow/user/user_flow.py'
-                            }
-                        )
+                        // parallel(
+                        //     a: {
+                        sh'python3 testing_flow/mfg/mfg_flow.py'
+                            // },
+                            // b: {
+                        sh'python3 testing_flow/user/user_flow.py'
+                        //     }
+                        // )
                     }
                     echo "======  Testing END  ======"
                 }
