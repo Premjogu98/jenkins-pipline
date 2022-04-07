@@ -42,9 +42,10 @@ pipeline {
             steps {
                 script{
                     echo "======  Testing Start  ======"
-                    dir('/home/diycam/Desktop/Prem Folder/rdx-testing') { // Build and push docker image
+                    dir('/home/diycam/Desktop/Prem Folder/rdx-testing') { 
                         // parallel(
                         //     a: {
+                        sh 'pwd'
                         sh'python3 testing_flow/mfg/mfg_flow.py'
                             // },
                             // b: {
