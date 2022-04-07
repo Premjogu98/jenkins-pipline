@@ -46,7 +46,7 @@ pipeline {
                         // parallel(
                         //     a: {
                         sh 'pwd'
-                        sh'python3 testing_flow/mfg/mfg_flow.py'
+                        // sh'python3 testing_flow/mfg/mfg_flow.py'
                             // },
                             // b: {
                         sh'python3 testing_flow/user/user_flow.py'
