@@ -33,7 +33,7 @@ pipeline {
                     //         echo "*** Build Completed: ${image_name} ***"
                     //     }
                     // }
-                    sh 'casca'
+                    // sh 'casca'
                     echo "======  Build and Push End  ======"
                 }
             }
